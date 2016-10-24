@@ -29,6 +29,12 @@ new_section "User Information"
     new_subsection "id"
     id
 
+    new_subsection "cat /etc/passwd"
+    cat /etc/passwd
+
+    new_subsection "Commands that can be run as root"
+    sudo -l
+
 ################################################################################
 
 new_section "Operating System Information"
@@ -78,17 +84,17 @@ new_section "Programs and Processes"
 
 new_section "Interesting Files"
 
-    new_subsection "SUID and GUID files"
-    find / -type f -perm -u=s -o -type f -perm -g=s -ls 2>/dev/null
+    new_subsection "SUID files"
+    find / -perm -4000 -type f -ls 2>/dev/null
 
-    new_subsection "SUID and GUID writeable"
-    find / -group `id -g` -perm -g=w -perm -u=s \
-           -o -perm -o=w -perm -u=s \
-           -o -perm -ow -perm -g=s \
-           -ls 2>/dev/null
+    new_subsection "SUID files owned by root"
+    find / -perm -4000 -type f -uid 0 -ls 2>/dev/null
+
+    new_subsection "GUID files"
+    find / -perm -2000 -type f -ls 2>/dev/null 
 
     new_subsection "Readable files in /etc"
-    find /etc -user `id -u` -perm -u=r \
+    find /etc -type f -user `id -u` -perm -u=r \
               -o -group `id -g` -perm -g=r \
               -o -perm -o=r \
               -ls 2>/dev/null
